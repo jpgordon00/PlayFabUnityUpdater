@@ -31,6 +31,6 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - Add UpdateHandler.cs and ensure PlayFab is authenticated before invoking UpdateHandler.Instance.UpdateProcedure().
 
 # Pushing a new update:
-    - Adding a version to Versions whose attribute "id" is larger than all previous versions.
-    - Change CurrentVersion in title data to a string matching the attribute "title" in the version with the largest attribute "id". 
-    - Optionally change the content in the new version with matching files in the PlayFab CDN.
+- Adding a version to Versions whose attribute "id" is larger than all previous versions.
+- Change CurrentVersion in title data to a string matching the attribute "title" in the version with the largest attribute "id". 
+- Optionally change the content in the new version with matching files in the PlayFab CDN.
