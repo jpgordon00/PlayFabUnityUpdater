@@ -11,7 +11,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 
 ## What does it do?
 - Keeps a list of versions and various attributes associated with the version, on a per-player basis.
-> Versions are stored as JSON in [internal title data](https://docs.microsoft.com/en-us/gaming/playfab/features/data/titledata/quickstart). Players are assigned the newest version on login, stored as [internal player data](https://docs.microsoft.com/en-us/rest/api/playfab/server/player-data-management/getuserinternaldata?view=playfab-rest). Versions are updated upon login if a newer version is found. Every update is written as a [PlayStream event](https://docs.microsoft.com/en-us/rest/api/playfab/events/playstream-events/writeevents?view=playfab-rest). 
+> Versions are stored as JSON in [internal title data](https://docs.microsoft.com/en-us/gaming/playfab/features/data/titledata/quickstart). Players are assigned the newest version on login, stored as [internal player data](https://docs.microsoft.com/en-us/rest/api/playfab/server/player-data-management/getuserinternaldata?view=playfab-rest). Versions are updated upon login if a newer version is found. Every update is written as a [PlayStream event](https://docs.microsoft.com/en-us/rest/api/playfab/events/playstream-events/writeevents?view=playfab-rest). [PlayFab statistics](https://docs.microsoft.com/en-us/gaming/playfab/features/data/playerdata/using-player-statistics) are written to track current version and number of version updates.
 - Serves players additional info for each file served from the PlayFab CDN.
 > Files are requested through a Cloudscript Function that includes the files URI, a unique name, and a name for the resulting file when downloaded. A use case for this would be to identify each file through the 'Name' attribute. Another use case for this would be to modify the function to include additional metadata.
 - Requests URI for and only downloads missing files.
@@ -31,6 +31,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - Add UpdateHandler.cs and ensure PlayFab is authenticated before invoking UpdateHandler.Instance.UpdateProcedure().
 
 # Pushing a new update:
-- Adding a version to Versions whose attribute "id" is larger than all previous versions.
-- Change CurrentVersion in title data to a string matching the attribute "title" in the version with the largest attribute "id". 
+- Add a new version to Versions whose attribute "id" is larger than all previous versions.
+- Change CurrentVersion in title data to a string matching the attribute "title" in the version with the largest attribute "id".
+> This string must match an existing version or the update will fail. Remember that the version with the largest attibute "id" gets selected as the newest version.
 - Optionally change the content in the new version with matching files in the PlayFab CDN.
