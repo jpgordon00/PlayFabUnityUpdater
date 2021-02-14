@@ -7,7 +7,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 > PlayFab provides file hosting through their environment and with Microsoft Azure's CDN. It also allows the hosting of private code that has access to their environment via an SDK.
 - [Azure Functions V3](https://docs.microsoft.com/en-us/azure/azure-functions/functions-versions) for writing C# [CloudScript functions](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/cloudscript-af/).
 - [SimpleJSON](https://github.com/HenrikPoulsen/SimpleJSON) for JSON parsing.
-- [GroupDownloader](https://github.com/jpgordon00/UnityGroupDownloader) for downloading updates.
+- [GroupDownloader](https://github.com/jpgordon00/UnityGroupDownloader) for client-side downloading of files using [UnityWebRequest](https://docs.unity3d.com/ScriptReference/Networking.UnityWebRequest.html).
 
 ## What does it do?
 - Keeps a list of versions and various attributes associated with the version, on a per-player basis.
@@ -17,6 +17,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - Requests URI for and only downloads missing files.
 
 ## How do I use this?
+# Setup:
 - Add the field 'Versions' as JSON in internal title data.
     - The object name is 'Versions' and is a JSON object containing ananonomyous array. 
     - The newsest version at any time is the version with the largest "id" attribute. These should be unique.
@@ -25,6 +26,11 @@ A server-authoritative auto-updater for Unity and PlayFab.
         - id, a unique integer identifier where the largest version is the version assigned to players.
         - buildVersion, a string where the a matching build version for [PlayFab Matchmaking 2.0](https://docs.microsoft.com/en-us/gaming/playfab/features/multiplayer/matchmaking/) can be used.
         - content, a array of objects containing name, filename and contentKey for each file. The attribute 'contentKey' should match the content key for the given file in the CDN, which should be a path.
-- Pushing a new update requires:
+- Set the current update version by setting the attribute 'CurrentVersion' to be a string matching a version title. This should be in title data.
+- Add all the required files listed in 'content' for whatever versions you want to support into the PlayFab CDN.
+- Add UpdateHandler.cs and ensure PlayFab is authenticated before invoking UpdateHandler.Instance.UpdateProcedure().
+
+# Pushing a new update:
     - Adding a version to Versions whose attribute "id" is larger than all previous versions.
     - Change CurrentVersion in title data to a string matching the attribute "title" in the version with the largest attribute "id". 
+    - Optionally change the content in the new version with matching files in the PlayFab CDN.
