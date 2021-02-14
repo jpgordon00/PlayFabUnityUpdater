@@ -23,11 +23,7 @@ namespace BeastBear
 
     // handles downloading files from PlayFab CDN stored in 'FileManifest'
     // cleans up previous versions and only downloads missing files
-    // invokes UPDATE_INVOKED when update first invoked
-    // invokes UPDATE_START when a download for a patch occurs
-    // invokes UPDATE_FAIL if an update or download fails or is cancelled
-    // invokes UPDATE_SUCCESS if update downloads and succeeds
-    // invokes UPDATE_SKIP if no update needed 
+    // TODO: listeners
     public class UpdateHandler
     {
         // singleton pattern
