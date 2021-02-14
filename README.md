@@ -22,6 +22,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
         - name, a unique string identifier for the version.
         - id, a unique integer identifier where the largest version is the version assigned to players.
         - buildVersion, a string where the a matching build version for [PlayFab Matchmaking 2.0](https://docs.microsoft.com/en-us/gaming/playfab/features/multiplayer/matchmaking/) can be used.
+        - content, a array of objects containing name, filename and contentKey for each file. The attribute 'contentKey' should match the content key for the given file in the CDN, which should be a path.
 - Pushing a new update requires:
     - Adding a version to Versions whose attribute "id" is larger than all previous versions.
     - Change CurrentVersion in title data to a string matching the attribute "title" in the version with the largest attribute "id". 
