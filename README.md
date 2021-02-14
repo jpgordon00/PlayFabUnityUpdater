@@ -15,6 +15,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - Serves players additional info for each file served from the PlayFab CDN.
 > Files are requested through a Cloudscript Function that includes the files URI, a unique name, and a name for the resulting file when downloaded. A use case for this would be to identify each file through the 'Name' attribute. Another use case for this would be to modify the function to include additional metadata.
 - Requests URI for and only downloads missing files.
+- Clients only download files that are missing. Incase of error during a download, the updater removes partially downloaded files and leaves completed downloads. On the next update invokation, the updater will only request the URI's for and download missing files.
 
 ## How do I use this?
 # Setup:
@@ -28,7 +29,10 @@ A server-authoritative auto-updater for Unity and PlayFab.
         - content, a array of objects containing name, filename and contentKey for each file. The attribute 'contentKey' should match the content key for the given file in the CDN, which should be a path.
 - Set the current update version by setting the attribute 'CurrentVersion' to be a string matching a version title. This should be in title data.
 - Add all the required files listed in 'content' for whatever versions you want to support into the PlayFab CDN.
-- Upload both functions in the 'functions' folder as '
+- Deploy two Azure Functions and register them on PlayFab Cloudscript Functions.
+> [Deploy](https://docs.microsoft.com/en-us/azure/devops/pipelines/targets/azure-functions?view=azure-devops&tabs=dotnet-core%2Cyaml) PollUpdater and PollUpdaterContent to the cloud.
+> Register PollUpdater and PollUpdaterContent in [PlayFab Functions](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/cloudscript-af/quickstart)
+> In [Automation](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/), register PollUpdater for a player_logged_in event.
 - Add UpdateHandler.cs and ensure PlayFab is authenticated before invoking UpdateHandler.Instance.UpdateProcedure().
 
 # Pushing a new update:
@@ -40,5 +44,16 @@ A server-authoritative auto-updater for Unity and PlayFab.
 # A visual view of all the components involved in configuring new updates:
 ![Versions in Internal Title Data](https://i.gyazo.com/d9f8fe798877b3f6e2d21a166d1bab4a.png)
 ![Versions JSON](https://i.gyazo.com/605a8a81052e8d0105b07f2d57dd7a3f.png)
-![CurrentVersion in title data](https://i.gyazo.com/605a8a81052e8d0105b07f2d57dd7a3f.png)
+![CurrentVersion in title data](https://i.gyazo.com/bac0068a2f19ec4e06296136d0681803.png)
 ![Files for versions in File Management](https://i.gyazo.com/32642f0fe8e07a7c0675046e4bdf3db1.png)
+
+## Future improvements and remarks.
+- This updater fails gracefully.
+> The Cloudscript Functions return errors in the case of inproper setup (for example not finding a correct version).
+
+> The client invokes error callbacks and sets (optionally) low timeout times for the download.
+- UpdateHandler.cs by default can recursively re-invoke the PollUpdaterContent function. While this was done because newly created accounts don't always update PlayFab data quickly enough for PollUpdaterContent to be succesful, I would like to expand on this system. It is not flexible in handling a multitude of errors.
+- The updater does not support large files. Since files are never left partially downloaded, exteremely large files would be lost if a download interuption existed at any point during the download.
+> A solution would be to break down large files into smaller chunks. This would mean download progress would not be lost in case of an interuption.
+
+## What I learned.
