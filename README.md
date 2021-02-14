@@ -16,6 +16,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 > Files are requested through a Cloudscript Function that includes the files URI, a unique name, and a name for the resulting file when downloaded. A use case for this would be to identify each file through the 'Name' attribute. Another use case for this would be to modify the function to include additional metadata.
 - Requests URI for and only downloads missing files.
 - Clients only download files that are missing. Incase of error during a download, the updater removes partially downloaded files and leaves completed downloads. On the next update invokation, the updater will only request the URI's for and download missing files.
+> UpdateHandler.cs provides access to elapsed time, progress and tweaking of how many times to re-invoke the update process.
 
 ## What I learned.
 - Best practices for deploying and developing Azure Functions apps using [Visual Studio](https://visualstudio.microsoft.com/) and [Visual Studio Code](https://code.visualstudio.com/).
