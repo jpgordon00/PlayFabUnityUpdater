@@ -70,6 +70,6 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - This updater fails gracefully.
 > The Cloudscript Functions return errors in the case of inproper setup (for example not finding a correct version).
 
-> The client invokes error callbacks and sets (optionally) low timeout times for the download.
+> The client invokes error callbacks and sets (optionally) low timeout intervals for download updates.
 - This updater is efficient in that it only downloads missing files and can support massive amounts of files. 
 - The entire code is commented.
