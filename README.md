@@ -12,7 +12,9 @@ A server-authoritative auto-updater for Unity and PlayFab.
 ## What does it do?
 - Keeps a list of versions and various attributes associated with the version, on a per-player basis.
 > Versions are stored as JSON in [internal title data](https://docs.microsoft.com/en-us/gaming/playfab/features/data/titledata/quickstart). Players are assigned the newest version on login, stored as [internal player data](https://docs.microsoft.com/en-us/rest/api/playfab/server/player-data-management/getuserinternaldata?view=playfab-rest). Versions are updated upon login if a newer version is found. Every update is written as a [PlayStream event](https://docs.microsoft.com/en-us/rest/api/playfab/events/playstream-events/writeevents?view=playfab-rest). [PlayFab statistics](https://docs.microsoft.com/en-us/gaming/playfab/features/data/playerdata/using-player-statistics) are written to track current version and number of version updates.
-- Serves players additional info for each file served from the PlayFab CDN.
+- Serves players content from their version andadditional info for each file served from the PlayFab CDN.
+> Players with different versions can exist at the same time, since the function serves content from that players current version.
+
 > Files are requested through a Cloudscript Function that includes the files URI, a unique name, and a name for the resulting file when downloaded. A use case for this would be to identify each file through the 'Name' attribute. Another use case for this would be to modify the function to include additional metadata.
 - Requests URI for and only downloads missing files.
 - Clients only download files that are missing. Incase of error during a download, the updater removes partially downloaded files and leaves completed downloads. On the next update invokation, the updater will only request the URI's for and download missing files.
