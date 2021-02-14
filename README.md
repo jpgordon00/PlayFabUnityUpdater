@@ -55,6 +55,8 @@ A server-authoritative auto-updater for Unity and PlayFab.
 ![Files for versions in File Management](https://i.gyazo.com/32642f0fe8e07a7c0675046e4bdf3db1.png)
 
 ## Future improvements.
+- Callbacks for update starting and update failing.
+> I encourage developers to edit UpdateHandler.cs and invoke whatever functions they want themselfs. The entire class is commented.
 - UpdateHandler.cs by default can recursively re-invoke the PollUpdaterContent function. While this was done because newly created accounts don't always update PlayFab data quickly enough for PollUpdaterContent to be succesful, I would like to expand on this system. It is not flexible in handling a multitude of errors.
 - The updater does not support large files. Since files are never left partially downloaded, exteremely large files would be lost if a download interuption existed at any point during the download.
 > A solution would be to break down large files into smaller chunks. This would mean download progress would not be lost in case of an interuption.
@@ -66,3 +68,4 @@ A server-authoritative auto-updater for Unity and PlayFab.
 
 > The client invokes error callbacks and sets (optionally) low timeout times for the download.
 - This updater is efficient in that it only downloads missing files and can support massive amounts of files. 
+- The entire code is commented.
