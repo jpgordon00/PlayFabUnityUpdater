@@ -41,6 +41,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 > Register PollUpdater and PollUpdaterContent in [PlayFab Functions](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/cloudscript-af/quickstart)
 > In [Automation](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/), register PollUpdater for a player_logged_in event.
 - Add UpdateHandler.cs and ensure PlayFab is authenticated before invoking UpdateHandler.Instance.UpdateProcedure().
+- Add GroupDownloader.cs in your scripts folder.
 
 # Pushing a new update:
 - Add a new version to Versions whose attribute "id" is larger than all previous versions.
