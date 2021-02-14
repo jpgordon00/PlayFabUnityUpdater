@@ -6,7 +6,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - [PlayFab](https://playfab.com/) as the backend-as-a-service.
 > PlayFab provides file hosting through their environment and with Microsoft Azure's CDN. It also allows the hosting of private code that has access to their environment via an SDK.
 - [Azure Functions V3](https://docs.microsoft.com/en-us/azure/azure-functions/functions-versions) for writing C# [CloudScript functions](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/cloudscript-af/).
-- [SimpleJSON](https://github.com/HenrikPoulsen/SimpleJSON) for JSON parsing.
+- [SimpleJSON](https://github.com/HenrikPoulsen/SimpleJSON) for JSON parsing on client and server.
 - [GroupDownloader](https://github.com/jpgordon00/UnityGroupDownloader) for client-side downloading of files using [UnityWebRequest](https://docs.unity3d.com/ScriptReference/Networking.UnityWebRequest.html).
 
 ## What does it do?
