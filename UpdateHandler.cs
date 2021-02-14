@@ -351,19 +351,16 @@ namespace BeastBear
                 if (manifest.AssetType == AssetType.JSON) {
                     /*`
                         Proccess JSON as a JSONNode
-                    */
-                    Utils.Instance.Refs.Add(manifest.Name, JSONNode.Parse(File.ReadAllText(manifest.Path)));
+                    */ 
                 } else if (manifest.AssetType == AssetType.SPRITE) {
                     /*
                         Proccess image as a Sprite
-                        TODO: density per each image assigned in Manifest
                     */
-                    Utils.Instance.Refs.Add(manifest.Name, Utils.LoadNewSprite(manifest.Path));
+  
                 } else if (manifest.AssetType == AssetType.TEXT) {
                     /*
                         Proccess as a string
                     */
-                    Utils.Instance.Refs.Add(manifest.Name, File.ReadAllText(manifest.Path));
                 }
             }
         }
