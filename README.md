@@ -28,6 +28,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
         - content, a array of objects containing name, filename and contentKey for each file. The attribute 'contentKey' should match the content key for the given file in the CDN, which should be a path.
 - Set the current update version by setting the attribute 'CurrentVersion' to be a string matching a version title. This should be in title data.
 - Add all the required files listed in 'content' for whatever versions you want to support into the PlayFab CDN.
+- Upload both functions in the 'functions' folder as '
 - Add UpdateHandler.cs and ensure PlayFab is authenticated before invoking UpdateHandler.Instance.UpdateProcedure().
 
 # Pushing a new update:
@@ -35,3 +36,9 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - Change CurrentVersion in title data to a string matching the attribute "title" in the version with the largest attribute "id".
 > This string must match an existing version or the update will fail. Remember that the version with the largest attibute "id" gets selected as the newest version.
 - Optionally change the content in the new version with matching files in the PlayFab CDN.
+
+# A visual view of all the components involved in configuring new updates:
+![Versions in Internal Title Data](https://i.gyazo.com/d9f8fe798877b3f6e2d21a166d1bab4a.png)
+![Versions JSON](https://i.gyazo.com/605a8a81052e8d0105b07f2d57dd7a3f.png)
+![CurrentVersion in title data](https://i.gyazo.com/605a8a81052e8d0105b07f2d57dd7a3f.png)
+![Files for versions in File Management](https://i.gyazo.com/32642f0fe8e07a7c0675046e4bdf3db1.png)
