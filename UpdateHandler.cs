@@ -18,9 +18,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using System.Threading;
 
-namespace BeastBear
-{
-
     // handles downloading files from PlayFab CDN stored in 'FileManifest'
     // cleans up previous versions and only downloads missing files
     // TODO: listeners
@@ -361,5 +358,3 @@ namespace BeastBear
             }
         }
     }
-
-}
