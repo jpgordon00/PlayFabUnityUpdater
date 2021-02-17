@@ -30,7 +30,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 ## Setup:
 - Add the field 'Versions' as JSON in internal title data.
     - The object name is 'Versions' and is a JSON object containing ananonomyous array. 
-    - The newsest version at any time is the version with the largest "id" attribute. These should be unique.
+    - The newsest version at any time is the version whose name matches the string defined in 'CurrentVersion' in title data. An update is issued ONLY if the current version has a larger "id" attribute than the players current version, or if the player has no version assigned yet.
     - Each version has the following properties:
         - name, a unique string identifier for the version.
         - id, a unique integer identifier where the largest version is the version assigned to players.
