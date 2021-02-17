@@ -38,6 +38,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
         - content, a array of objects containing name, filename and contentKey for each file. The attribute 'contentKey' should match the content key for the given file in the CDN, which should be a path.
 - Set the current update version by setting the attribute 'CurrentVersion' to be a string matching a version title. This should be in title data.
 - Add all the required files listed in 'content' for whatever versions you want to support into the PlayFab CDN.
+> The content key for any file is a folder with the name of the version appended by the 'contentKey' value for that file. This means files are seperated by each new version.
 - Deploy two Azure Functions and register them on PlayFab Cloudscript Functions.
 > [Deploy](https://docs.microsoft.com/en-us/azure/devops/pipelines/targets/azure-functions?view=azure-devops&tabs=dotnet-core%2Cyaml) PollUpdater and PollUpdaterContent to the cloud. Ensure you have SimpleJSON.cs somewhere in your src.
 > Register PollUpdater and PollUpdaterContent in [PlayFab Functions](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/cloudscript-af/quickstart)
