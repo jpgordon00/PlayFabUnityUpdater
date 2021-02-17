@@ -1,7 +1,7 @@
 # PlayFabUnityUpdater
 A server-authoritative auto-updater for Unity and PlayFab.
 
-## What frameworks/libraries are involved?
+# What frameworks/libraries are involved?
 - .NET Core and C#
 - [PlayFab](https://playfab.com/) as the backend-as-a-service.
 > PlayFab provides file hosting through their environment and with Microsoft Azure's CDN. It also allows the hosting of private code that has access to their environment via an SDK.
@@ -9,7 +9,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - [SimpleJSON](https://github.com/HenrikPoulsen/SimpleJSON) for JSON parsing on client and server.
 - [GroupDownloader](https://github.com/jpgordon00/UnityGroupDownloader) for client-side downloading of files using [UnityWebRequest](https://docs.unity3d.com/ScriptReference/Networking.UnityWebRequest.html).
 
-## What does it do?
+# What does it do?
 - Keeps a list of versions and various attributes associated with the version, on a per-player basis.
 > Versions are stored as JSON in [internal title data](https://docs.microsoft.com/en-us/gaming/playfab/features/data/titledata/quickstart). Players are assigned the newest version on login, stored as [internal player data](https://docs.microsoft.com/en-us/rest/api/playfab/server/player-data-management/getuserinternaldata?view=playfab-rest). Versions are updated upon login if a newer version is found. Every update is written as a [PlayStream event](https://docs.microsoft.com/en-us/rest/api/playfab/events/playstream-events/writeevents?view=playfab-rest). [PlayFab statistics](https://docs.microsoft.com/en-us/gaming/playfab/features/data/playerdata/using-player-statistics) are written to track current version and number of version updates.
 - Serves players content from their version andadditional info for each file served from the PlayFab CDN.
@@ -20,14 +20,14 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - Clients only download files that are missing. Incase of error during a download, the updater removes partially downloaded files and not completed downloads. On the next update invokation, the updater will only request the URI's for and download missing files.
 > UpdateHandler.cs provides access to elapsed time, progress and tweaking of how many times to re-invoke the update process.
 
-## What I learned.
+# What I learned.
 - Best practices for deploying and developing Azure Functions apps using [Visual Studio](https://visualstudio.microsoft.com/) and [Visual Studio Code](https://code.visualstudio.com/).
 - Best practices for data storage and player management using PlayFab.
 - This project's design decision to be as modular as possible saved me a significant amount of development time. While this project was created for a multiplayer game, it was very easy to extract and upload as a standalone component.
 - JSON parsing and async programming in C#.
 
-## How do I use this?
-# Setup:
+# How do I use this?
+## Setup:
 - Add the field 'Versions' as JSON in internal title data.
     - The object name is 'Versions' and is a JSON object containing ananonomyous array. 
     - The newsest version at any time is the version with the largest "id" attribute. These should be unique.
@@ -39,25 +39,25 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - Set the current update version by setting the attribute 'CurrentVersion' to be a string matching a version title. This should be in title data.
 - Add all the required files listed in 'content' for whatever versions you want to support into the PlayFab CDN.
 - Deploy two Azure Functions and register them on PlayFab Cloudscript Functions.
-> [Deploy](https://docs.microsoft.com/en-us/azure/devops/pipelines/targets/azure-functions?view=azure-devops&tabs=dotnet-core%2Cyaml) PollUpdater and PollUpdaterContent to the cloud.
+> [Deploy](https://docs.microsoft.com/en-us/azure/devops/pipelines/targets/azure-functions?view=azure-devops&tabs=dotnet-core%2Cyaml) PollUpdater and PollUpdaterContent to the cloud. Ensure you have SimpleJSON.cs somewhere in your src.
 > Register PollUpdater and PollUpdaterContent in [PlayFab Functions](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/cloudscript-af/quickstart)
 > In [Automation](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/), register PollUpdater for a player_logged_in event.
 - Add UpdateHandler.cs and ensure PlayFab is authenticated before invoking UpdateHandler.Instance.UpdateProcedure().
 - Add GroupDownloader.cs in your scripts folder.
 
-# Pushing a new update:
+## Pushing a new update:
 - Add a new version to Versions whose attribute "id" is larger than all previous versions.
 - Change CurrentVersion in title data to a string matching the attribute "title" in the version with the largest attribute "id".
 > This string must match an existing version or the update will fail. Remember that the version with the largest attibute "id" gets selected as the newest version.
 - Optionally change the content in the new version with matching files in the PlayFab CDN.
 
-# A visual view of all the components involved in configuring new updates:
+## A visual view of all the components involved in configuring new updates:
 ![Versions in Internal Title Data](https://i.gyazo.com/d9f8fe798877b3f6e2d21a166d1bab4a.png)
 ![Versions JSON](https://i.gyazo.com/605a8a81052e8d0105b07f2d57dd7a3f.png)
 ![CurrentVersion in title data](https://i.gyazo.com/bac0068a2f19ec4e06296136d0681803.png)
 ![Files for versions in File Management](https://i.gyazo.com/32642f0fe8e07a7c0675046e4bdf3db1.png)
 
-## Future improvements.
+# Future improvements.
 - Callbacks for update starting and update failing.
 > I encourage developers to edit UpdateHandler.cs and invoke whatever functions they want themselfs. However, if requested, I will add callbacks in the form of events to UpdateHandler.
 - UpdateHandler.cs by default can recursively re-invoke the PollUpdaterContent function. While this was done because newly created accounts don't always update PlayFab data quickly enough for PollUpdaterContent to be succesful, I would like to expand on this system. It is not flexible in handling a multitude of errors.
