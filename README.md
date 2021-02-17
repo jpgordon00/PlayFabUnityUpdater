@@ -54,7 +54,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 
 ## A visual view of all the components involved in configuring new updates:
 ![Versions in Internal Title Data](https://i.gyazo.com/d9f8fe798877b3f6e2d21a166d1bab4a.png)
-![Versions JSON](https://i.gyazo.com/605a8a81052e8d0105b07f2d57dd7a3f.png)
+![Versions JSON](https://i.gyazo.com/7942f1fe2e9bf4c3b664f18dfdc34b14.png)
 ![CurrentVersion in title data](https://i.gyazo.com/bac0068a2f19ec4e06296136d0681803.png)
 ![Files for versions in File Management](https://i.gyazo.com/32642f0fe8e07a7c0675046e4bdf3db1.png)
 
