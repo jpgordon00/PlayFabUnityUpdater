@@ -12,14 +12,14 @@ A server-authoritative auto-updater for Unity and PlayFab.
 
 # What does it do?
 - Keeps a list of versions and various attributes associated with the version, on a per-player basis.
-> Versions are stored as JSON in [internal title data](https://docs.microsoft.com/en-us/gaming/playfab/features/data/titledata/quickstart). Players are assigned the newest version on login, stored as [internal player data](https://docs.microsoft.com/en-us/rest/api/playfab/server/player-data-management/getuserinternaldata?view=playfab-rest). Versions are updated upon login if a newer version is found. Every update is written as a [PlayStream event](https://docs.microsoft.com/en-us/rest/api/playfab/events/playstream-events/writeevents?view=playfab-rest). [PlayFab statistics](https://docs.microsoft.com/en-us/gaming/playfab/features/data/playerdata/using-player-statistics) are written to track current version and number of version updates.
-- Serves players content from their version andadditional info for each file served from the PlayFab CDN.
-> Players with different versions can exist at the same time, since the function serves content from that players current version.
+> Versions are stored as JSON in [internal title data](https://docs.microsoft.com/en-us/gaming/playfab/features/data/titledata/quickstart). Players are assigned the newest version on login, stored as [internal player data](https://docs.microsoft.com/en-us/rest/api/playfab/server/player-data-management/getuserinternaldata?view=playfab-rest). Versions are updated upon login if a newer version is found. Every update is written as a [PlayStream event](https://docs.microsoft.com/en-us/rest/api/playfab/events/playstream-events/writeevents?view=playfab-rest). [PlayFab statistics](https://docs.microsoft.com/en-us/gaming/playfab/features/data/playerdata/using-player-statistics) are written to track current version and number of version updates for each player.
+- Serves a set of files specified in the version that player is using, where each file is served from the PlayFab CDN.
+> Players with different versions can exist at the same time, since the function serves content from that players current version. 
 
 > Files are requested through a Cloudscript Function that includes the files URI, a unique name, and a name for the resulting file when downloaded. A use case for this would be to identify each file through the 'Name' attribute. Another use case for this would be to modify the function to include additional metadata.
-- Requests URI for and only downloads missing files.
-- Clients only download files that are missing. Incase of error during a download, the updater removes partially downloaded files and not completed downloads. On the next update invokation, the updater will only request the URI's for and download missing files.
-> UpdateHandler.cs provides access to elapsed time, progress and tweaking of how many times to re-invoke the update process.
+- Client requests URI for and only downloads missing files.
+- Incase of error during a download, the updater removes partially downloaded files and not completed downloads. On the next update invokation, the updater will only request the URI's for and download missing files.
+> UpdateHandler.cs provides access to elapsed time, progress and how many times the update process is re-invoked. Updates are checked for on every player login.
 
 # What I learned.
 - Best practices for deploying and developing Azure Functions apps using [Visual Studio](https://visualstudio.microsoft.com/) and [Visual Studio Code](https://code.visualstudio.com/).
@@ -41,7 +41,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - Add all the required files listed in 'content' for whatever versions you want to support into the PlayFab CDN.
 > The content key for any file is a folder with the name of the version appended by the 'contentKey' value for that file. This means files are seperated by each new version.
 - Deploy two Azure Functions and register them on PlayFab Cloudscript Functions.
-> [Deploy](https://docs.microsoft.com/en-us/azure/devops/pipelines/targets/azure-functions?view=azure-devops&tabs=dotnet-core%2Cyaml) PollUpdater and PollUpdaterContent to the cloud. Ensure you have SimpleJSON.cs somewhere in your src.
+> [Deploy](https://docs.microsoft.com/en-us/azure/devops/pipelines/targets/azure-functions?view=azure-devops&tabs=dotnet-core%2Cyaml) PollUpdater and PollUpdaterContent to the cloud. Ensure you have SimpleJSON.cs somewhere in your source.
 > Register PollUpdater and PollUpdaterContent in [PlayFab Functions](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/cloudscript-af/quickstart)
 > In [Automation](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/), register PollUpdater for a player_logged_in event.
 - Add UpdateHandler.cs and ensure PlayFab is authenticated before invoking UpdateHandler.Instance.UpdateProcedure().
