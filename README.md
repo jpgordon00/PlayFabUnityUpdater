@@ -11,7 +11,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - [GroupDownloader](https://github.com/jpgordon00/UnityGroupDownloader) for client-side downloading of files using [UnityWebRequest](https://docs.unity3d.com/ScriptReference/Networking.UnityWebRequest.html).
 
 # What does it do?
-- Allows the developer to push content updates at will where clients ma
+- Allows the developer to push content updates at will where clients may or may not automatically download new files.
 - Keeps a list of versions and various attributes associated with the version, on a per-player basis.
 > Versions are stored as JSON in [internal title data](https://docs.microsoft.com/en-us/gaming/playfab/features/data/titledata/quickstart). Players are assigned the newest version on login, stored as [internal player data](https://docs.microsoft.com/en-us/rest/api/playfab/server/player-data-management/getuserinternaldata?view=playfab-rest). Versions are updated upon login if a newer version is found. Every update is written as a [PlayStream event](https://docs.microsoft.com/en-us/rest/api/playfab/events/playstream-events/writeevents?view=playfab-rest). [PlayFab statistics](https://docs.microsoft.com/en-us/gaming/playfab/features/data/playerdata/using-player-statistics) are written to track current version and number of version updates for each player.
 - Serves a set of files specified in the version that player is using, where each file is served from the PlayFab CDN.
@@ -20,7 +20,9 @@ A server-authoritative auto-updater for Unity and PlayFab.
 > Files are requested through a Cloudscript Function that includes the files URI, a unique name, and a name for the resulting file when downloaded. A use case for this would be to identify each file through the 'Name' attribute. Another use case for this would be to modify the function to include additional metadata.
 - Client requests URI for and only downloads missing files.
 - Incase of error during a download, the updater removes partially downloaded files and not completed downloads. On the next update invokation, the updater will only request the URI's for and download missing files.
-> UpdateHandler.cs provides access to elapsed time, progress and how many times the update process is re-invoked. Updates are checked for on every player login.
+> UpdateHandler.cs provides access to elapsed time, progress and how many times the update process is re-invoked. Updates are checked for on every player login. 
+
+> UpdateHandler.cs also provides cleanup in the case of a new update downloaded. All base folders not matching the used version is always deleted, upon update invokation.
 
 # What I learned.
 - Best practices for deploying and developing Azure Functions apps using [Visual Studio](https://visualstudio.microsoft.com/) and [Visual Studio Code](https://code.visualstudio.com/).
