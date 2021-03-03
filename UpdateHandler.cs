@@ -18,6 +18,67 @@ using System.Threading.Tasks;
 using UnityEngine;
 using System.Threading;
 
+/*
+        Optional type of asset for a FileManifest object
+        JSON stores the assets name in Refs with a JSONNode object.
+        IMAGE stores the assets name in Refs with a Sprite 
+        SPINE stgores the assets name in Refs with a Spine ruintime obj
+    */
+    public enum AssetType {
+        JSON,
+        SPRITE,
+        SPINE,
+        TEXT
+    }
+
+    // list of our content files directed from PlayFab
+    public class FileManifest
+    {
+
+        // local path to this file
+        // usually set to Application.persistantDataPath combined with PartialPath
+        public string Path {
+            get;
+            set;
+        }
+
+        // filename including filetype
+        public string Filename {
+            get;
+            set;
+        }
+        public string URI {
+            get;
+            set;
+        }
+
+        // content-name given 
+        public string Name {
+            get;
+            set;
+        }
+
+        // path to download the content from PlayFab CDN
+        // format: UPDATE_VERSION/FOLDER_NAME/ASSET_NAME
+        public string PartialPath {
+            get;
+            set;
+        }
+
+        /*
+            Optional AssetType to load the selected type into Refs 
+        */
+        public AssetType AssetType {
+            get; set;
+        }
+
+        public override String ToString() {
+            return "{Path=" + Path + "}{Filename=" + Filename + "}{URI=" + URI + "}{PartialPath=" + PartialPath + "{Name=" + Name + "}";
+        }
+
+        
+    }
+
     // handles downloading files from PlayFab CDN stored in 'FileManifest'
     // cleans up previous versions and only downloads missing files
     // TODO: listeners
