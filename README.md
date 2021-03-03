@@ -14,7 +14,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 
 # What does it do?
 - Allows the developer to push content updates at will, where clients are updated in a server authoratative manner.
-> Each player queries for a new update on login. Each update is identified by an integer named ID, where a player is updated only if an update exists with a larger ID integer than the players current version. For example, if all updates are kept in increasing order then the player is guarenteed to have the newest version. Another example would be to seperate updates by more than one numeric value, for example two at a time. By doing this, you could release intermediate updates that new players are updated to but existing players are not.
+> Updates are queried by the response to logged in event, meaning this process is server authoratitve . Each update is identified by an integer named ID, where a player is updated only if an update exists with a larger ID integer than the players current version. For example, if all updates are kept in increasing order then the player is guarenteed to have the newest version. Another example would be to seperate updates by more than one numeric value, for example two at a time. By doing this, you could release intermediate updates that new players are updated to but existing players are not.
 - Keeps a list of versions and various attributes associated with the version, on a per-player basis.
 > Versions are stored as JSON in [internal title data](https://docs.microsoft.com/en-us/gaming/playfab/features/data/titledata/quickstart). Players are assigned the newest version on login, stored as [internal player data](https://docs.microsoft.com/en-us/rest/api/playfab/server/player-data-management/getuserinternaldata?view=playfab-rest). Versions are updated upon login if a newer version is found. Every update is written as a [PlayStream event](https://docs.microsoft.com/en-us/rest/api/playfab/events/playstream-events/writeevents?view=playfab-rest). [PlayFab statistics](https://docs.microsoft.com/en-us/gaming/playfab/features/data/playerdata/using-player-statistics) are written to track current version and number of version updates for each player.
 - Serves a set of files specified in the version that player is using, where each file is served from the PlayFab CDN.
@@ -54,9 +54,9 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - Add GroupDownloader.cs in your scripts folder.
 
 ## Pushing a new update:
-- Add a new version to Versions whose attribute "id" is larger than all previous versions.
-- Change CurrentVersion in title data to a string matching the attribute "title" in the version with the largest attribute "id".
-> This string must match an existing version or the update will fail. Remember that the version with the largest attibute "id" gets selected as the newest version.
+- Optionally add a new version to Versions whose attribute "id" is larger than all previous versions. Only players whose version ID's are explicitly lower than the 'CurrentVersion' are updated.
+- Optionally Change CurrentVersion in title data to a string matching the attribute "title" in the version with the largest attribute "id". All new players are updated to the 'CurrentVersion' regardless of its ID attribute.
+> The 'CurrentVersion' string must match an existing version 'name' property or the update will fail.
 - Optionally change the content in the new version with matching files in the PlayFab CDN.
 
 ## A visual view of all the components involved in configuring new updates:
