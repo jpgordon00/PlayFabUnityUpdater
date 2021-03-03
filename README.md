@@ -5,6 +5,8 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - .NET Core and C#
 - [PlayFab](https://playfab.com/) as the backend-as-a-service.
 > PlayFab provides file hosting through their environment and with Microsoft Azure's CDN. It also allows the hosting of private code that has access to their environment via an SDK.
+
+> This particular project requires the [PlayFab Unity SDK](https://docs.microsoft.com/en-us/gaming/playfab/sdks/unity3d/). 
 - [Azure Functions V3](https://docs.microsoft.com/en-us/azure/azure-functions/functions-versions) for writing C# [CloudScript functions](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/cloudscript-af/).
 - [SimpleJSON](https://github.com/HenrikPoulsen/SimpleJSON) for JSON parsing on client and server.
 - > While both PlayFab and Unity provides their own JSON serialization and deserialization, I found it useful to use a single resource in my client and server code. This partciular library is a single .cs file that supports JSON deserialization only. In the Azure Functions I used PlayFab serialization to serialiize the returning of JSON objects.
@@ -41,9 +43,9 @@ A server-authoritative auto-updater for Unity and PlayFab.
         - id, a unique integer identifier where the largest version is the version assigned to players.
         - buildVersion, a string where the a matching build version for [PlayFab Matchmaking 2.0](https://docs.microsoft.com/en-us/gaming/playfab/features/multiplayer/matchmaking/) can be used.
         - content, a array of objects containing name, filename and contentKey for each file. The attribute 'contentKey' should match the content key for the given file in the CDN, which should be a path.
-- Set the current update version by setting the attribute 'CurrentVersion' to be a string matching a version title. This should be in title data.
-- Add all the required files listed in 'content' for whatever versions you want to support into the PlayFab CDN.
-> The content key for any file is a folder with the name of the version appended by the 'contentKey' value for that file. This means files are seperated by each new version.
+- In title data, Set the current update version by setting the attribute 'CurrentVersion' to be a string matching a version title.
+- Add all the required files listed in 'content', the PlayFab CDN in the developer portal, for whatever versions you want to support into the PlayFab CDN.
+> The content key for any file is a folder with the name of the version appended by the 'contentKey' value for that file. Each version should have a folder with all supported files in that folder, where 'contentKey' matches the fileName    .
 - Deploy two Azure Functions and register them on PlayFab Cloudscript Functions.
 > [Deploy](https://docs.microsoft.com/en-us/azure/devops/pipelines/targets/azure-functions?view=azure-devops&tabs=dotnet-core%2Cyaml) PollUpdater and PollUpdaterContent to the cloud. Ensure you have SimpleJSON.cs somewhere in your source.
 > Register PollUpdater and PollUpdaterContent in [PlayFab Functions](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/cloudscript-af/quickstart)
