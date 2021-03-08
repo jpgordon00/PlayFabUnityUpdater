@@ -250,13 +250,9 @@ using System.Threading;
                 return;
             }
             await Task.Delay(_delayTime * 1000);
-            if (_fileManifest != null)
-                if (_fileManifest.Count != 0) 
-                    if (UpdateProcedureB()) {
-                        /* Case update resolved */
-                        return;
-                    }
-            if ((DateTime.Now.Second - _updateStartTime) < _maxTime) {
+            if (UpdateProcedureB()) {
+                    // update resolved do nothing
+             } else if ((DateTime.Now.Second - _updateStartTime) < _maxTime) {
                 /* Case time is within _maxTime */
                 _fileManifest.Clear();
                 PlayFabCloudScriptAPI.ExecuteFunction(new ExecuteFunctionRequest()
@@ -331,7 +327,8 @@ using System.Threading;
         // parses 'HeroData' and 'StructureData'
         // returns true for update resolution, false if error
         private bool UpdateProcedureB() {
-            if (_downloader != null || !IsUpdating) return false;
+            if (_downloader != null || !IsUpdating || _fileManifest == null) return false;
+            if (_fileManifest.Count == 0) return false;
 
             /* 
                 Case Manifest incomplete
