@@ -19,13 +19,13 @@ A server-authoritative auto-updater for Unity and PlayFab.
 > Versions are stored as JSON in [internal title data](https://docs.microsoft.com/en-us/gaming/playfab/features/data/titledata/quickstart). Players are assigned the newest version on login, stored as [internal player data](https://docs.microsoft.com/en-us/rest/api/playfab/server/player-data-management/getuserinternaldata?view=playfab-rest). Versions are updated upon login if a newer version is found. Every update is written as a [PlayStream event](https://docs.microsoft.com/en-us/rest/api/playfab/events/playstream-events/writeevents?view=playfab-rest). [PlayFab statistics](https://docs.microsoft.com/en-us/gaming/playfab/features/data/playerdata/using-player-statistics) are written to track current version and number of version updates for each player.
 - Serves a set of files specified in the version that player is using, where each file is served from the PlayFab CDN.
 > Players with different versions can exist at the same time, since the function serves content from that players current version. 
-
-> Files are requested through a Cloudscript Function that includes the files URI, a unique name, and a name for the resulting file when downloaded. A use case for this would be to identify each file through the 'Name' attribute. Another use case for this would be to modify the function to include additional metadata for each version or each file.
+- All versions have completely seperate files stored in the PlayFab CDN, so multiple versions and players using those versions can exist simulatenously.
+> Files are requested through a Cloudscript Function that includes the files URI, a unique name, and the resulting file name. A use case for this would be to identify each file through the 'Name' attribute. Another use case for this would be to modify the function to include additional metadata for each version or each file.
 - Client requests URI for and only downloads missing files.
-- Incase of error during a download, the updater removes partially downloaded files. On the next update invokation, the updater will only request the URI's for and download missing files.
+- Incase of error during a download, the updater removes partially downloaded files.
 > UpdateHandler.cs provides access to elapsed time, progress and how many times the update process is re-invoked.
 
-> UpdateHandler.cs also provides cleanup in the case of a new update downloaded. All base folders not matching the used version is always deleted, upon update invokation.
+> UpdateHandler.cs provides cleanup in the case of a new update downloaded. All base folders not matching the used version is always deleted, upon update invokation.
 
 # What I learned.
 - Best practices for deploying and developing Azure Functions apps using [Visual Studio](https://visualstudio.microsoft.com/) and [Visual Studio Code](https://code.visualstudio.com/).
@@ -45,7 +45,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
         - content, a array of objects containing name, filename and contentKey for each file. The attribute 'contentKey' should match the content key for the given file in the CDN, which should be a path.
 - In title data, Set the current update version by setting the attribute 'CurrentVersion' to be a string matching a version title.
 - Add all the required files listed in 'content', the PlayFab CDN in the developer portal, for whatever versions you want to support into the PlayFab CDN.
-> The content key for any file is a folder with the name of the version appended by the 'contentKey' value for that file. Each version should have a folder with all supported files in that folder, where 'contentKey' matches the fileName    .
+> The content key points to a folder with with the current versions 'name' attribute as its folder name. For example, if the content key is "coffee.png" and the version is "DEV", then the folder should be "DEV/coffee.png".
 - Deploy two Azure Functions and register them on PlayFab Cloudscript Functions.
 > [Deploy](https://docs.microsoft.com/en-us/azure/devops/pipelines/targets/azure-functions?view=azure-devops&tabs=dotnet-core%2Cyaml) PollUpdater and PollUpdaterContent to the cloud. Ensure you have SimpleJSON.cs somewhere in your source.
 > Register PollUpdater and PollUpdaterContent in [PlayFab Functions](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/cloudscript-af/quickstart)
@@ -79,5 +79,5 @@ A server-authoritative auto-updater for Unity and PlayFab.
 > The Cloudscript Functions return errors in the case of inproper setup (for example not finding a correct version).
 
 > The client invokes error callbacks and sets (optionally) low timeout intervals for download updates.
-- This updater is efficient in that it only downloads missing files and can support massive amounts of files. 
-- The entire code is commented.
+- This updater is efficient in that it only downloads missing files and can support a massive amounts of smaller files. 
+- The code heavily is commented.
