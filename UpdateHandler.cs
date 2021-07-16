@@ -296,22 +296,14 @@ using System.Threading;
                     Filename = json["content"][i]["filename"], Name = json["content"][i]["name"], PartialPath = json["content"][i]["contentKey"], Path = DataPath + Path.DirectorySeparatorChar + json["content"][i]["contentKey"]
                 });
             }
-            // submit request for non-existant files
+            // submit request for non-existant files and update their URL
             for (var i = 0; i < json["content"].Count; i++) {
                 if (!File.Exists(FileManifest[i].Path)) {
                     _expectedFileCount += 1;
-                    PlayFabClientAPI.GetContentDownloadUrl(new GetContentDownloadUrlRequest { HttpMethod = "GET", Key = json["content"][i]["contentKey"], ThruCDN = true}, OnUpdateCDNResult, OnError);
-                }
-            }
-        }
-
-        // finish populating FileManifest
-        private void OnUpdateCDNResult(GetContentDownloadUrlResult result) {
-            string partialPath = Utils.FilenameFromURI(result.URL);
-            foreach(var manifest in _fileManifest) {
-                if (manifest.PartialPath == partialPath) {
-                    manifest.URI = result.URL;
-                    return;
+                    PlayFabClientAPI.GetContentDownloadUrl(new GetContentDownloadUrlRequest { HttpMethod = "GET", Key = json["content"][i]["contentKey"], ThruCDN = true }, 
+                    result => {
+                        FileManifest[i].URI = result.URL;
+                    }, OnError);
                 }
             }
         }
