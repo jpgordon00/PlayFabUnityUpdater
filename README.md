@@ -10,7 +10,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 - [Azure Functions V3](https://docs.microsoft.com/en-us/azure/azure-functions/functions-versions) for writing C# [CloudScript functions](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/cloudscript-af/).
 - [SimpleJSON](https://github.com/HenrikPoulsen/SimpleJSON) for JSON parsing on client and server.
 - > While both PlayFab and Unity provides their own JSON serialization and deserialization, I found it useful to use a single resource in my client and server code. This partciular library is a single .cs file that supports JSON deserialization only. In the Azure Functions I used PlayFab serialization to serialiize the returning of JSON objects.
-- [GroupDownloader](https://github.com/jpgordon00/UnityGroupDownloader) for client-side downloading of files using [UnityWebRequest](https://docs.unity3d.com/ScriptReference/Networking.UnityWebRequest.html).
+- [GroupDownloader](https://github.com/jpgordon00/UnityGroupDownloader) for 'one-by-one' downloading of multiple files using [UnityWebRequest](https://docs.unity3d.com/ScriptReference/Networking.UnityWebRequest.html).
 
 # What does it do?
 - Allows the developer to push content updates at will, where clients are updated in a server authoratative manner.
