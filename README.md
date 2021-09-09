@@ -77,6 +77,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 > This is partially implemented in the ProcessManifest function.
 
 ## Remarks.
+- Developers should use this auto-updater to download Unity AssetBundles.
 - This updater fails gracefully.
 > The Cloudscript Functions return errors in the case of inproper setup (for example not finding a correct version).
 
