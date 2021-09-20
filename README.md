@@ -50,8 +50,8 @@ A server-authoritative auto-updater for Unity and PlayFab.
 > [Deploy](https://docs.microsoft.com/en-us/azure/devops/pipelines/targets/azure-functions?view=azure-devops&tabs=dotnet-core%2Cyaml) PollUpdater and PollUpdaterContent to the cloud. Ensure you have SimpleJSON.cs somewhere in your source.
 > Register PollUpdater and PollUpdaterContent in [PlayFab Functions](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/cloudscript-af/quickstart)
 > In [Automation](https://docs.microsoft.com/en-us/gaming/playfab/features/automation/), register PollUpdater for a player_logged_in event.
-- Add UpdateHandler.cs and ensure PlayFab is authenticated before invoking UpdateHandler.Instance.UpdateProcedure().
-- Add GroupDownloader.cs in your scripts folder.
+- Add UpdateHandler.cs to your Unity project and ensure PlayFab is authenticated before invoking UpdateHandler.Instance.UpdateProcedure().
+- Add GroupDownloader.cs to your Unity project.
 
 ## Pushing a new update:
 - Optionally add a new version to Versions whose attribute "id" is larger than all previous versions. Only players whose version ID's are explicitly lower than the 'CurrentVersion' are updated.
