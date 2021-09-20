@@ -67,7 +67,7 @@ A server-authoritative auto-updater for Unity and PlayFab.
 
 # Future improvements.
 - Keep seperate version lists for each code version.
-> If we kept some unique object for every "code version", then we could ensure that downloaded update data is tailored for the current client app. Because the app store and google store both allow OS updates, you may want seperate assets/version lists for each different update. You may also want to force users to download an update on the store to have access to the newest version (newest version list and version within that list).
+> If we kept some unique object for every "code version", then we could ensure that downloaded update data is tailored for the current client app. Because the app store and google store both allow in-store updates, developers likely will want seperate assets/version lists for each different update. You may also want to force users to download an update on the store to have access to the newest version (which would be newest version list and version within that list). Alternatively, you couldc create custom upgrade paths within this upgrade tree to describe the upgrade path for any nuber of upgrade situations.
 - Callbacks for update starting and update failing.
 > I encourage developers to edit UpdateHandler.cs and invoke whatever functions they want themselfs. However, if requested, I will add callbacks in the form of events to UpdateHandler.
 - UpdateHandler.cs by default can recursively re-invoke the PollUpdaterContent function. While this was done because newly created accounts don't always update PlayFab data quickly enough for PollUpdaterContent to be succesful, I would like to expand on this system. It is not flexible in handling a multitude of errors.
