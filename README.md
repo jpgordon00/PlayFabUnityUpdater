@@ -59,19 +59,13 @@ A server-authoritative auto-updater for Unity and PlayFab.
 > The 'CurrentVersion' string must match an existing version 'name' property or the update will fail.
 - Optionally change the content in the new version with matching files in the PlayFab CDN.
 
-## A visual view of all the components involved in configuring new updates:
-![Versions in Internal Title Data](https://i.gyazo.com/d9f8fe798877b3f6e2d21a166d1bab4a.png)
-![Versions JSON](https://i.gyazo.com/7942f1fe2e9bf4c3b664f18dfdc34b14.png)
-![CurrentVersion in title data](https://i.gyazo.com/bac0068a2f19ec4e06296136d0681803.png)
-![Files for versions in File Management](https://i.gyazo.com/32642f0fe8e07a7c0675046e4bdf3db1.png)
-
 # Future improvements.
 - Keep seperate version lists for each code version.
 > If we kept some unique object for every "code version", then we could ensure that downloaded update data is tailored for the current client app. Because the app store and google store both allow in-store updates, developers likely will want seperate assets/version lists for each different update. You may also want to force users to download an update on the store to have access to the newest version (which would be newest version list and version within that list). Alternatively, you could create custom upgrade paths within this upgrade tree to describe an upgrade path for any nuber of client upgrade situations.
-- Callbacks for update starting and update failing.
-> I encourage developers to edit UpdateHandler.cs and invoke whatever functions they want themselfs. However, if requested, I will add callbacks in the form of events to UpdateHandler.
+- Keep attributes/KVP's for each version.
+> We could extend our version system from only serving static files to also storing KVP's on a per-version basis.
 - UpdateHandler.cs by default can recursively re-invoke the PollUpdaterContent function. While this was done because newly created accounts don't always update PlayFab data quickly enough for PollUpdaterContent to be succesful, I would like to expand on this system. It is not flexible in handling a multitude of errors.
-- The updater does not support large files. Since files are never left partially downloaded, exteremely large files would be lost if a download interuption existed at any point during the download.
+- The updater does not support large files and does not check file size. While large files can be downloaded since they are supported by the Unity downloader, caching of these files incase of interruption is not supported. Since files are never left partially downloaded, exteremely large files would be lost if a download interuption existed at any point during the download.
 > A solution would be to break down large files into smaller chunks. This would mean download progress would not be lost in case of an interuption.
 - Files can be loaded into memory straight from a FileManifest object.
 > This is partially implemented in the ProcessManifest function.
@@ -84,3 +78,9 @@ A server-authoritative auto-updater for Unity and PlayFab.
 > The client invokes error callbacks and sets (optionally) low timeout intervals for download updates.
 - This updater is efficient in that it only downloads missing files and can support a massive amounts of smaller files. 
 - The code heavily is commented.
+
+## A visual view of all the components involved in configuring new updates:
+![Versions in Internal Title Data](https://i.gyazo.com/d9f8fe798877b3f6e2d21a166d1bab4a.png)
+![Versions JSON](https://i.gyazo.com/7942f1fe2e9bf4c3b664f18dfdc34b14.png)
+![CurrentVersion in title data](https://i.gyazo.com/bac0068a2f19ec4e06296136d0681803.png)
+![Files for versions in File Management](https://i.gyazo.com/32642f0fe8e07a7c0675046e4bdf3db1.png)
