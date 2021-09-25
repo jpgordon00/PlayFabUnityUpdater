@@ -93,6 +93,20 @@ using System.Threading;
                 return _instance;
             }
         }
+        
+         
+        // invoked when PF serves this player update information
+        
+        // invoked for each file manifest URI is recieved 
+          
+             
+        // invoked when an update has started downloading files
+        
+            
+        // invoked when the update handler is resolved    
+        // first parameter is true if succesful update, false if error
+        // second parameter is true if network needed to download files
+        public event Action<bool, bool> UpdateResolved;
 
         /* Time in seconds before a download timeout */
         public int Timeout = 2;
@@ -308,9 +322,10 @@ using System.Threading;
             }
         }
 
-        // error handling while updating or perhaps downloading
+        // for PF API calls error handling while updating or perhaps downloading
         private void OnError(PlayFabError error = null) {
             if (IsUpdating) {
+                UpdateResolved?.Invoke(false, false);   
                 Reset(true);
             } // do nothing if errors occur after this point
         }
@@ -350,6 +365,7 @@ using System.Threading;
                 _downloader.Download();
             } else {
                 /* Case all files up-to-date */
+                UpdateResolved?.Invoke(true, false);   
                 ProcessManifest();
                 Cleanup();
                 Reset(false);
@@ -357,10 +373,11 @@ using System.Threading;
             return true;
         }
 
-        // invoked by download handler
+        // for file downloading invoked by download handler incase of network interruption
         private void OnUpdateFailure(bool completed, string uri, string fileResultPath) {
             /* Case finished */
             if (!_downloader.Downloading || _downloader.DidFinish) {
+                UpdateResolved?.Invoke(false, true);
                 Reset(true);
             }
         }
@@ -369,6 +386,7 @@ using System.Threading;
         private void OnUpdateSuccess(bool completed, string uri, string fileResultPath) {
             /* Case finished */
             if (!_downloader.Downloading || _downloader.DidFinish) {
+                UpdateResolved?.Invoke(true, true);    
                 ProcessManifest();
                 Cleanup();
                 Reset(false);
