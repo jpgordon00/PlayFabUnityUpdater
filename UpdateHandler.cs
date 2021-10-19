@@ -315,8 +315,8 @@ using System.Threading;
                 if (!File.Exists(FileManifest[i].Path)) {
                     _expectedFileCount += 1;
                     PlayFabClientAPI.GetContentDownloadUrl(new GetContentDownloadUrlRequest { HttpMethod = "GET", Key = json["content"][i]["contentKey"], ThruCDN = true }, 
-                    result => {
-                        FileManifest[i].URI = result.URL;
+                    result2 => {
+                        FileManifest[i].URI = result2.URL;
                     }, OnError);
                 }
             }
